@@ -1,12 +1,17 @@
 import pygame, sys
 from pygame.locals import *
+
+import TileMap
 from Player import Player
 from Flashlight import Flashlight
 import math
+
+from Tile import Tile
 from Vector import Vector
 from Bullet import Bullet
 import PhysicsEngine
 from Globals import SCREEN_WIDTH, SCREEN_HEIGHT
+from assets.scripts.core_funcs import *
 
 clock = pygame.time.Clock()
 
@@ -22,9 +27,36 @@ player1: Player = Player(pos=[400, 400])
 
 bullets: [Bullet] = []
 
+tile_size = 8
+
+water = pygame.Surface((tile_size, tile_size))
+water.fill((79, 76, 176))
+
+grass = pygame.Surface((tile_size, tile_size))
+grass.fill((0, 175, 0))
+
+tiles = [water, grass]
+
+tile_map = TileMap.TileMap()
+mapping = tile_map.map
+
+
+def load_map(grid, tiles):
+    y = 0
+    for tile in grid:
+        x = 0
+        for cell in tile:
+            if cell.type == "0":
+                screen.blit(tiles[0], (x * tile_size, y * tile_size))
+            if cell.type == "1":
+                screen.blit(tiles[1], (x * tile_size, y * tile_size))
+            x += 1
+        y += 1
+
 
 def main_loop():
     while True:
+        load_map(mapping, tiles)
         mouse_pos = pygame.mouse.get_pos()
         check_player_rotation(mouse_pos)
         for event in pygame.event.get():
@@ -32,10 +64,10 @@ def main_loop():
                 pygame.quit()
                 sys.exit()
             check_player_movement(event)
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 shoot_bullet()
 
-        screen.fill((0, 0, 0))
         draw_player()
         pygame.display.update()
         clock.tick(60)
@@ -87,7 +119,7 @@ def check_player_rotation(mouse_pos):
 def get_normalized_vector(pos1, pos2):
     x, y = pos1[0] - pos2[0], pos1[1] - pos2[1]
     length = math.sqrt(pow(x, 2) + pow(y, 2))
-    return Vector(x/length, y/length, 5)
+    return Vector(x / length, y / length, 5)
 
 
 def shoot_bullet():
