@@ -18,4 +18,4 @@ class PlayerSettings:
 
 class PlayerStats:
     def __init__(self, *args, **kwargs):
-        self.movement_speed = kwargs.get("speed", 0.5)
+        self.movement_speed = kwargs.get("speed", 1)
