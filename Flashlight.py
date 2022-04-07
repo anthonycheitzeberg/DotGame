@@ -9,6 +9,7 @@ class Flashlight:
         self.points = kwargs.get("points",[])
         self.color = kwargs.get("color", [])
         self.light_vector = kwargs.get("light_vector", Vector(0, 0, 1))
+        self.light_length = kwargs.get("length", 100)
         self.angle = kwargs.get("light_angle", .4)
 
     def get_points(self):
@@ -17,6 +18,6 @@ class Flashlight:
         self.points = [self.pos, pos2, pos3]
 
     def add_angle_to_vector(self, angle):
-        newX = self.pos[0] + ((self.light_vector.x * cos(angle) - self.light_vector.y * sin(angle)) * 70)
-        newY= self.pos[1] + ((self.light_vector.x * sin(angle) + self.light_vector.y * cos(angle)) * 70)
+        newX = self.pos[0] + ((self.light_vector.x * cos(angle) - self.light_vector.y * sin(angle)) * self.light_length)
+        newY= self.pos[1] + ((self.light_vector.x * sin(angle) + self.light_vector.y * cos(angle)) * self.light_length)
         return [newX, newY]
