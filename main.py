@@ -5,6 +5,8 @@ import TileMap
 from Player import Player
 from Flashlight import Flashlight
 import math
+
+from Tile import Tile
 from Vector import Vector
 from Bullet import Bullet
 import PhysicsEngine
@@ -25,14 +27,12 @@ player1: Player = Player(pos=[400, 400])
 
 bullets: [Bullet] = []
 
-border = 160
-size = 8
-count = 10
+tile_size = 8
 
-water = pygame.Surface((size, size))
+water = pygame.Surface((tile_size, tile_size))
 water.fill((79, 76, 176))
 
-grass = pygame.Surface((size, size))
+grass = pygame.Surface((tile_size, tile_size))
 grass.fill((0, 175, 0))
 
 tiles = [water, grass]
@@ -41,22 +41,22 @@ tile_map = TileMap.TileMap()
 mapping = tile_map.map
 
 
-def load_map(size, grid, tiles):
+def load_map(grid, tiles):
     y = 0
     for tile in grid:
         x = 0
         for cell in tile:
             if cell.type == "0":
-                screen.blit(tiles[0], (x * size, y * size))
+                screen.blit(tiles[0], (x * tile_size, y * tile_size))
             if cell.type == "1":
-                screen.blit(tiles[1], (x * size, y * size))
+                screen.blit(tiles[1], (x * tile_size, y * tile_size))
             x += 1
         y += 1
 
 
 def main_loop():
     while True:
-        load_map(size, mapping, tiles)
+        load_map(mapping, tiles)
         mouse_pos = pygame.mouse.get_pos()
         check_player_rotation(mouse_pos)
         for event in pygame.event.get():

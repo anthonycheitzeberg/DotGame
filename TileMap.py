@@ -7,7 +7,6 @@ from assets.scripts.core_funcs import *
 
 class TileMap:
     border = 160
-    size = 8
     count = 10
 
 
