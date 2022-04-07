@@ -17,6 +17,7 @@ screen = pygame.display.set_mode(WINDOW_SIZE, 0, 32)
 
 player1: Player = Player(pos=[400, 400])
 
+
 def main_loop():
     while True:
         for event in pygame.event.get():
@@ -33,9 +34,8 @@ def main_loop():
 
 def draw_player():
     player1.move(player1.movement_vector)
-    pygame.draw.line(screen, (255, 255, 0), player1.flashLight.pos,
-                                                       [player1.flashLight.pos[0] + player1.flashLight.light_vector.x * 100,
-                                                       player1.flashLight.pos[1] + player1.flashLight.light_vector.y * 100])
+    player1.flashLight.get_points()
+    pygame.draw.polygon(screen, (255, 255, 0), points=player1.flashLight.points)
     pygame.draw.circle(screen, player1.settings.color, player1.pos, player1.dimen)
 
 

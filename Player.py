@@ -1,6 +1,7 @@
 from Vector import Vector
 from Flashlight import Flashlight
 
+
 class Player:
     def __init__(self, *args, **kwargs):
         self.id = kwargs.get("id", '')
