@@ -1,4 +1,5 @@
 import pygame, math, os
+import random
 
 
 def read_f(path):
@@ -113,3 +114,46 @@ def normalize(num, amt):
     else:
         num = 0
     return num
+
+
+def generate_noise(width, height):
+    noise_map = []
+    # Populate a noise map with 0s
+    for y in range(height):
+        new_row = []
+        for x in range(width):
+            new_row.append(0)
+        noise_map.append(new_row)
+
+    # Progressively apply variation to the noise map but changing values + or -
+    # 5 from the previous entry in the same list, or the average of the
+    # previous entry and the entry directly above
+    new_value = 0
+    top_of_range = 0
+    bottom_of_range = 0
+    for y in range(height):
+        for x in range(width):
+            if x == 0 and y == 0:
+                continue
+            if y == 0:  # If the current position is in the first row
+                new_value = noise_map[y][x - 1] + random.randint(-1000, +1000)
+            elif x == 0:  # If the current position is in the first column
+                new_value = noise_map[y - 1][x] + random.randint(-1000, +1000)
+            else:
+                minimum = min(noise_map[y][x - 1], noise_map[y - 1][x])
+                maximum = max(noise_map[y][x - 1], noise_map[y - 1][x])
+                average_value = minimum + ((maximum - minimum) / 2.0)
+                new_value = average_value + random.randint(-1000, +1000)
+            noise_map[y][x] = new_value
+            # check whether value of current position is new top or bottom
+            # of range
+            if new_value < bottom_of_range:
+                bottom_of_range = new_value
+            elif new_value > top_of_range:
+                top_of_range = new_value
+    # Normalises the range, making minimum = 0 and maximum = 1
+    difference = float(top_of_range - bottom_of_range)
+    for y in range(height):
+        for x in range(width):
+            noise_map[y][x] = (noise_map[y][x] - bottom_of_range) / difference
+    return noise_map
